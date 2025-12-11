@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const blogPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+	.slice(0, 5);
+---
+
+<BaseLayout title="Home - My Blog" description="개인 블로그 홈페이지입니다.">
+	<div class="space-y-12">
+		<section class="text-center py-12">
+			<div class="flex justify-center mb-6">
+				<img src="/blog-icon.png" alt="Blog Icon" class="w-32 h-32 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300" />
+			</div>
+			<h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+				Welcome to My Blog
+			</h1>
+			<p class="text-xl text-slate-600 dark:text-slate-300 mt-4">
+				개발과 일상에 대한 이야기를 공유합니다
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-3xl font-bold mb-6 text-slate-800 dark:text-slate-200">최근 포스트</h2>
+			<div class="grid gap-6 md:grid-cols-2">
+				{blogPosts.map((post) => (
+					<a 
+						href={`/blog/${post.slug}`}
+						class="group block p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500"
+					>
+						<div class="flex items-center gap-2 mb-3">
+							<span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full">
+								{post.data.category}
+							</span>
+							<time class="text-sm text-slate-500 dark:text-slate-400">
+								{post.data.pubDate.toLocaleDateString('ko-KR')}
+							</time>
+						</div>
+						<h3 class="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+							{post.data.title}
+						</h3>
+						{post.data.description && (
+							<p class="text-slate-600 dark:text-slate-400 line-clamp-2">
+								{post.data.description}
+							</p>
+						)}
+						{post.data.tags.length > 0 && (
+							<div class="flex flex-wrap gap-2 mt-4">
+								{post.data.tags.map((tag) => (
+									<span class="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded">
+										#{tag}
+									</span>
+								))}
+							</div>
+						)}
+					</a>
+				))}
+			</div>
+			{blogPosts.length === 0 && (
+				<p class="text-center text-slate-500 dark:text-slate-400 py-12">
+					아직 작성된 포스트가 없습니다.
+				</p>
+			)}
+			{blogPosts.length > 0 && (
+				<div class="mt-8 text-center">
+					<a 
+						href="/blog" 
+						class="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg"
+					>
+						모든 포스트 보기 →
+					</a>
+				</div>
+			)}
+		</section>
+	</div>
+</BaseLayout>
