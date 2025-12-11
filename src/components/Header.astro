@@ -1,12 +1,13 @@
 ---
 const currentPath = Astro.url.pathname;
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
 	<nav class="container mx-auto px-4 py-4 max-w-4xl">
 		<div class="flex items-center justify-between">
-			<a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-				<img src="/blog-icon.png" alt="Blog Icon" class="w-10 h-10 rounded-lg" />
+			<a href={baseUrl} class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+				<img src={`${baseUrl}blog-icon.png`} alt="Blog Icon" class="w-10 h-10 rounded-lg" />
 				<span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
 					My Blog
 				</span>
@@ -14,9 +15,9 @@ const currentPath = Astro.url.pathname;
 			<ul class="flex gap-6">
 				<li>
 					<a 
-						href="/" 
+						href={baseUrl} 
 						class={`px-3 py-2 rounded-md transition-colors ${
-							currentPath === '/' 
+							currentPath === baseUrl || currentPath === '/' 
 								? 'text-blue-600 dark:text-blue-400 font-semibold' 
 								: 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
 						}`}
@@ -26,9 +27,9 @@ const currentPath = Astro.url.pathname;
 				</li>
 				<li>
 					<a 
-						href="/about" 
+						href={`${baseUrl}about`} 
 						class={`px-3 py-2 rounded-md transition-colors ${
-							currentPath === '/about' 
+							currentPath === `${baseUrl}about` || currentPath === '/about'
 								? 'text-blue-600 dark:text-blue-400 font-semibold' 
 								: 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
 						}`}
@@ -38,9 +39,9 @@ const currentPath = Astro.url.pathname;
 				</li>
 				<li>
 					<a 
-						href="/blog" 
+						href={`${baseUrl}blog`} 
 						class={`px-3 py-2 rounded-md transition-colors ${
-							currentPath.startsWith('/blog') 
+							currentPath.startsWith(`${baseUrl}blog`) || currentPath.startsWith('/blog')
 								? 'text-blue-600 dark:text-blue-400 font-semibold' 
 								: 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
 						}`}
